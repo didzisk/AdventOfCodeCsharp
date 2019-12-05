@@ -8,19 +8,23 @@
     ".NETCoreApp,Version=v3.0": []
   },
   "packageFolders": {
-    "C:\\Users\\didzi\\.nuget\\packages\\": {}
+    "C:\\Users\\didzis.klavins\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\training\\AdventOfCode\\ConsoleApp1\\Day2.csproj",
+      "projectUniqueName": "C:\\Training\\AdventOfCodeCsharp\\ConsoleApp1\\Day2.csproj",
       "projectName": "Day2",
-      "projectPath": "C:\\training\\AdventOfCode\\ConsoleApp1\\Day2.csproj",
-      "packagesPath": "C:\\Users\\didzi\\.nuget\\packages\\",
-      "outputPath": "C:\\training\\AdventOfCode\\ConsoleApp1\\obj\\",
+      "projectPath": "C:\\Training\\AdventOfCodeCsharp\\ConsoleApp1\\Day2.csproj",
+      "packagesPath": "C:\\Users\\didzis.klavins\\.nuget\\packages\\",
+      "outputPath": "C:\\Training\\AdventOfCodeCsharp\\ConsoleApp1\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\didzi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\didzis.klavins\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -28,7 +32,8 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://pkgs.dev.azure.com/costrequest/_packaging/vismafeed/nuget/v3/index.json": {}
       },
       "frameworks": {
         "netcoreapp3.0": {
