@@ -23,10 +23,10 @@ namespace Day5
 			var outp51 = Machine.Calc(memory51, 0, OutputConsole);
 			int[] memory6 = { 3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1 };
 			Console.WriteLine("asking for nonzero, indirect:");
-			Machine.Calc(memory5, 7, OutputConsole);
+			Machine.Calc(memory6, 7, OutputConsole);
 			int[] memory61 = { 3, 3, 1105, -1, 9, 1101, 0, 0, 12, 4, 12, 99, 1 };
 			Console.WriteLine("asking for nonzero, indirect, input 0:");
-			Machine.Calc(memory61, 7, OutputConsole);
+			Machine.Calc(memory61, 0, OutputConsole);
 
 			int[] largerExample =
 			{
