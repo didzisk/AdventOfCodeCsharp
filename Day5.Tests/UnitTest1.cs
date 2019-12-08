@@ -107,7 +107,7 @@ namespace Day5.Tests
 				1001, 223, 1, 223, 4, 223, 99, 226
 			};
 			OutputList = new List<int>();
-			Machine.Calc(memory3, 1, CollectOutput);
+			Machine.Calc(0, memory3, new int[] { 1}, CollectOutput);
 			var res = OutputList.Last();
 			Assert.That(res, Is.EqualTo(15097178));
 
@@ -154,7 +154,7 @@ namespace Day5.Tests
 			};
 
 			OutputList = new List<int>();
-			Machine.Calc(memory3, 5, CollectOutput);
+			Machine.Calc(0, memory3, new int[] { 5}, CollectOutput);
 			var res = OutputList.Last();
 			Assert.That(res, Is.EqualTo(1558663));
 
