@@ -67,6 +67,8 @@ namespace Day9
 							long arg = addr;
 							if (arg1Mode == 0)
 								arg = memory[addr];
+							if (arg1Mode == 2)
+								arg = memory[addr+relativeBase];
 							return arg;
 					}
 
@@ -86,6 +88,8 @@ namespace Day9
 							long arg = addr;
 							if (arg2Mode == 0)
 								arg = memory[addr];
+							if (arg2Mode==2)
+								arg = memory[addr + relativeBase];
 							return arg;
 					}
 

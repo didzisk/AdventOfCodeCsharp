@@ -29,6 +29,10 @@ namespace Day9
 			Console.WriteLine("D9Ex2, expect long:");
 			Machine.RunToOutput(0, day9ex2, OutputConsole);
 
+			long[] day9ex3 = {109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99};
+			Console.WriteLine("D9Ex3, expect prog:");
+			Machine.RunToOutput(0, day9ex3, OutputConsole);
+
 
 		}
 	}
