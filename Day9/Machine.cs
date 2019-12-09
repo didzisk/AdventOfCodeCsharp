@@ -63,6 +63,7 @@ namespace Day9
 						case 6:
 						case 7:
 						case 8:
+						case 9:
 							var addr = memory[pc + 1];
 							long arg = addr;
 							if (arg1Mode == 0)
@@ -104,6 +105,10 @@ namespace Day9
 						case 8:
 							var addr = memory[pc + 3];
 							long arg = addr;
+
+							if (arg3Mode == 2)
+								arg = memory[addr + relativeBase];
+
 							return arg;
 					}
 
@@ -116,16 +121,24 @@ namespace Day9
 				{
 					case 1:
 						var addrt = memory[pc + 3];
+						if (arg3Mode == 2)
+							addrt = addrt + relativeBase;
 						memory[addrt] = arg1 + arg2;
 						pc = pc + 4;
 						break;
 					case 2:
 						addrt = memory[pc + 3];
+						if (arg3Mode == 2)
+							addrt = addrt + relativeBase;
 						memory[addrt] = arg1 * arg2;
 						pc = pc + 4;
 						break;
 					case 3:
 						var addr31 = memory[pc + 1];
+						if (arg1Mode == 2)
+						{
+							addr31 = relativeBase + addr31;
+						}
 						memory[addr31] = Inputs[inputCounter++];
 						pc = pc + 2;
 						if (calcMode == CalcMode.RunToFirstInput)
@@ -151,21 +164,28 @@ namespace Day9
 							pc = pc + 3;
 						break;
 					case 7: //LT
+						addrt = memory[pc + 3];
+						if (arg3Mode == 2)
+							addrt = addrt + relativeBase;
 						if (arg1 < arg2)
-							memory[arg3] = 1;
+							memory[addrt] = 1;
 						else
-							memory[arg3] = 0;
+							memory[addrt] = 0;
 						pc = pc + 4;
 						break;
 					case 8: //EQ
+						addrt = memory[pc + 3];
+						if (arg3Mode == 2)
+							addrt = addrt + relativeBase;
 						if (arg1 == arg2)
-							memory[arg3] = 1;
+							memory[addrt] = 1;
 						else
-							memory[arg3] = 0;
+							memory[addrt] = 0;
 						pc = pc + 4;
 						break;
 					case 9: //Set Relative Base
-						relativeBase = arg1;
+						relativeBase += arg1;
+						pc += 2;
 						break;
 					case 99:
 						return new MachineStatus { Result = memory[0], ProgramCounter = pc, RanToHalt = true };

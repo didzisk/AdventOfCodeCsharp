@@ -29,9 +29,39 @@ namespace Day9
 			Console.WriteLine("D9Ex2, expect long:");
 			Machine.RunToOutput(0, day9ex2, OutputConsole);
 
-			long[] day9ex3 = {109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99};
+			long[] day9ex3code =
+				{109, 1, 204, -1, 1001, 100, 1, 100, 1008, 100, 16, 101, 1006, 101, 0, 99};
+			long[] day9ex3 = new long[1000];
+			day9ex3code.CopyTo(day9ex3, 0);
+			/*
+			 00	109		IncreaseRB
+			 01	  1	 		by value 1
+			 02 204		Output from relative pos 1-1=0
+			 03 1001	ADD
+			 04	 100		from address 100
+			 05    1		and value 1
+			 06	 100		Place into 100
+			 07 1008	EQ?
+			 08	 100		from address 100
+			 09   16		value 16
+			 10	 101		place 1 or 0 into 101
+			 11	1006	JZ
+			 12  101		if this is 0
+			 13    0		goto 0
+			 14   99	HALT
+
+			 */
 			Console.WriteLine("D9Ex3, expect prog:");
-			Machine.RunToOutput(0, day9ex3, OutputConsole);
+			Machine.Calc(0, day9ex3, new long[0], OutputConsole);
+
+			long[] day9mem1 = new long[10000];
+			Console.WriteLine("D9Part1, expect 1 line");
+			Day9Input.Day9Code.CopyTo(day9mem1, 0);
+			Machine.Calc(0, day9mem1, new long[]{1}, OutputConsole);
+			day9mem1 = new long[10000];
+			Console.WriteLine("D9Part2, expect 1 line");
+			Day9Input.Day9Code.CopyTo(day9mem1, 0);
+			Machine.Calc(0, day9mem1, new long[] { 2 }, OutputConsole);
 
 
 		}
