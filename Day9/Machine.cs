@@ -44,6 +44,7 @@ namespace Day9
 		public static MachineStatus Calc(long pc, long[] memory, long[] Inputs, Action<string, long, long> outputFunc, CalcMode calcMode=default)
 		{
 			int inputCounter = 0;
+			long relativeBase = 0;
 			while (pc < memory.Length)
 			{
 				var opcode = memory[pc] % 100;
@@ -158,6 +159,9 @@ namespace Day9
 						else
 							memory[arg3] = 0;
 						pc = pc + 4;
+						break;
+					case 9: //Set Relative Base
+						relativeBase = arg1;
 						break;
 					case 99:
 						return new MachineStatus { Result = memory[0], ProgramCounter = pc, RanToHalt = true };
