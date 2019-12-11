@@ -36,7 +36,7 @@ namespace Day9
 		{
 			return Calc(pc, memory, new long[]{ singleInput }, outputFunc, CalcMode.RunToFirstInput);
 		}
-		public static MachineStatus RunToOutput(int pc, long[] memory, Action<string, long, long> outputFunc)
+		public static MachineStatus RunToOutput(long pc, long[] memory, Action<string, long, long> outputFunc)
 		{
 			return Calc(pc, memory, new long[0], outputFunc, CalcMode.RunToFirstOutput);
 		}

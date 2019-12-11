@@ -15,6 +15,7 @@ namespace Day10
 	{
 		static void Main(string[] args)
 		{
+			Class1.RunMain();
 			Console.WriteLine("◚");
 			var t = new IntPoint { X = 3, Y = 0 };
 			for (int i = 0; i < 20; i++)
