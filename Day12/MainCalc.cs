@@ -26,13 +26,19 @@ namespace Day12
 
 		public static void Calc()
 		{
-			CalcBatch(Day12Input.Ex1, 10);
-			CalcBatch(Day12Input.Ex2, 100);
-			CalcBatch(Day12Input.official, 1000);
+			//CalcBatch(Day12Input.Ex1, 10);
+			//CalcBatch(Day12Input.Ex2, 100);
+			//CalcBatch(Day12Input.official, 1000);
 			Stopwatch watch = Stopwatch.StartNew();
-			CalcBatch(Day12Input.official, 1000000);
+			CalcBatch(Day12Input.Test1, 100);
 			watch.Stop();
 			Console.WriteLine(watch.Elapsed);
+
+			CalcAllPeriods(Day12Input.Satellites(Day12Input.Ex1));
+			CalcAllPeriods(Day12Input.Satellites(Day12Input.Ex2));
+			CalcAllPeriods(Day12Input.Satellites(Day12Input.official));
+
+			//Console.WriteLine($"{GCD(6,4)}");
 		}
 
 		public static IntMove ApplyGravity(IntMove source, IntMove target)
@@ -92,9 +98,132 @@ namespace Day12
 			}
 			foreach (var a in l)
 			{
-//				Console.WriteLine($"x={a.X}, y={a.Y}, z={a.Z};  vx={a.VX}, vy={a.VY}, vz={a.VZ}");
+				//Console.WriteLine($"x={a.X}, y={a.Y}, z={a.Z};  vx={a.VX}, vy={a.VY}, vz={a.VZ}");
 
 			}
 		}
+
+		public static int CalcPeriod(int idx, IntMove[] l)
+		{
+			var a = l[idx];
+			var counter = 0;
+			//if (a.Equals())
+			do
+			{
+				UpdateAll(l);
+				counter++;
+			} while (!a.Equals(l[idx]));
+			return counter;
+		}
+
+		public static int CalcPeriodX(IntMove[] l)
+		{
+			var initialState = l.ToArray();
+			Console.WriteLine("Initial X");
+			foreach (var a in l)
+				Console.WriteLine($"x={a.X}, y={a.Y}, z={a.Z};  vx={a.VX}, vy={a.VY}, vz={a.VZ}");
+
+			var counter = 0;
+			var eq = true;
+			do
+			{
+				UpdateAll(l);
+				counter++;
+				eq = true;
+				for (int i = 0; i < l.Length; i++)
+				{
+					if (l[i].X != initialState[i].X)
+						eq = false;
+					if (l[i].VX != initialState[i].VX)
+						eq = false;
+				}
+
+			} while (!eq);
+			Console.WriteLine("Final X");
+			foreach (var a in l)
+				Console.WriteLine($"x={a.X}, y={a.Y}, z={a.Z};  vx={a.VX}, vy={a.VY}, vz={a.VZ}");
+			return counter;
+		}
+		public static int CalcPeriodY(IntMove[] l)
+		{
+			Console.WriteLine("Initial Y");
+			foreach (var a in l)
+				Console.WriteLine($"x={a.X}, y={a.Y}, z={a.Z};  vx={a.VX}, vy={a.VY}, vz={a.VZ}");
+			var initialState = l.ToArray();
+
+			var counter = 0;
+			var eq = true;
+			do
+			{
+				UpdateAll(l);
+				counter++;
+				eq = true;
+				for (int i = 0; i < l.Length; i++)
+				{
+					if (l[i].Y != initialState[i].Y)
+						eq = false;
+					if (l[i].VY != initialState[i].VY)
+						eq = false;
+				}
+
+			} while (!eq);
+			Console.WriteLine("Final Y");
+			foreach (var a in l)
+				Console.WriteLine($"x={a.X}, y={a.Y}, z={a.Z};  vx={a.VX}, vy={a.VY}, vz={a.VZ}");
+			return counter;
+		}
+		public static int CalcPeriodZ(IntMove[] l)
+		{
+			var initialState = l.ToArray();
+			Console.WriteLine("Initial Z");
+			foreach (var a in l)
+				Console.WriteLine($"x={a.X}, y={a.Y}, z={a.Z};  vx={a.VX}, vy={a.VY}, vz={a.VZ}");
+
+			var counter = 0;
+			var eq = true;
+			do
+			{
+				UpdateAll(l);
+				counter++;
+				eq = true;
+				for (int i = 0; i < l.Length; i++)
+				{
+					if (l[i].Z != initialState[i].Z)
+						eq = false;
+					if (l[i].VZ != initialState[i].VZ)
+						eq = false;
+				}
+
+			} while (!eq);
+			Console.WriteLine("Final Z");
+			foreach (var a in l)
+				Console.WriteLine($"x={a.X}, y={a.Y}, z={a.Z};  vx={a.VX}, vy={a.VY}, vz={a.VZ}");
+			return counter;
+		}
+
+		static Int64 GCD(Int64 a, Int64 b)
+		{
+			return b == 0 ? Math.Abs(a) : GCD(b, a % b);
+		}
+
+		public static Int64 LCM(Int64 a, Int64 b)
+		{
+			return a * b / GCD(a, b);
+		}
+
+
+		public static long CalcAllPeriods(IntMove[] l)
+		{
+			var px = CalcPeriodX(l.ToArray());
+			var py = CalcPeriodY(l.ToArray());
+			var pz = CalcPeriodZ(l.ToArray());
+
+			var gcd = GCD(px, GCD(py, pz));
+			var per = LCM(px, py);
+			per = LCM(pz, per);
+			Console.WriteLine($"px={px}, py={py}, pz={pz}, gcd={gcd}, period={per}");
+			return per;
+		}
+
 	}
 }
