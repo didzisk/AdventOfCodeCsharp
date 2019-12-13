@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Numerics;
+using System.Drawing;
+using System.Linq;
+using System.Threading;
 using Day9;
 
 namespace Day11
@@ -350,6 +352,165 @@ namespace Day11
 			p.SetColor(1);
 			p.Run();
 			p.Display();
+		}
+
+	}
+
+	public static class Day13Main
+	{
+		public static void MainCalc()
+		{
+			List<INT> input = new List<INT>();
+			string line;
+			line = Day9Input.Day13CodeAsString;
+			foreach (string token in line.Split(','))
+			{
+				input.Add(INT.Parse(token));
+			}
+			var grid = new Dictionary<Point, INT>();
+			var brain = new Intcode(input);
+			while (!brain.halted)
+			{
+				brain.RunToOutput();
+				var x =brain.output;
+				brain.RunToOutput();
+				var y = brain.output;
+				brain.RunToOutput();
+				var item = brain.output;
+				var pt = new Point {X = (int)x, Y = (int)y};
+				grid[pt] = item;
+			}
+
+			var pt1=grid.Count(e=>e.Value==2);
+
+			Console.WriteLine($"Num blocks part 1 = {pt1}");
+		}
+
+		public static void WaitMicroseconds(int d)
+		{
+			//1 tick=100ns
+			var t = DateTime.Now;
+			var next = t.Add(new TimeSpan(10 * d));
+			while (DateTime.Now < next)
+			{ }
+		}
+
+		public static async void Part2Calc()
+		{
+			Console.ReadLine();
+			List<INT> input = new List<INT>();
+			string line;
+			line = Day9Input.Day13CodeAsString;
+			foreach (string token in line.Split(','))
+			{
+				input.Add(INT.Parse(token));
+			}
+
+			input[0] = 2;
+			var grid = new Dictionary<Point, INT>();
+			var brain = new Intcode(input);
+			INT joystick = 0;
+			INT paddleX = 0;
+			bool badBallSeen=false;
+			INT maxDisplay = 0;
+			int delayTimer = 100;
+			Console.CursorVisible = false;
+			while (!brain.halted)
+			{
+				if (brain.waiting)
+				{
+					brain.SendInput(joystick);
+					WaitMicroseconds(delayTimer);
+				}
+				else
+				{
+					brain.RunToOutput();
+					var x =(int)brain.output;
+					brain.RunToOutput();
+					var y = (int)brain.output;
+					brain.RunToOutput();
+					var item = (int)brain.output;
+					if (x == -1 && y == 0)
+					{
+						INT display = item;
+						if (display > maxDisplay)
+							maxDisplay = display;
+						var numBlocks = grid.Count(e => e.Value == 2);
+						delayTimer = numBlocks / 4 + 1;
+						Console.SetCursorPosition(1, 1);
+						Console.Write($"SCORE: {maxDisplay:#####}   Remaining: {numBlocks:000}");
+					}
+					else
+					{
+						if (item<10)
+							Console.SetCursorPosition(x, y+2);
+						if (item == 0)
+						{
+							if (!(x==0&&y==0))
+								Console.Write(" ");
+						}
+						if (item == 1)
+						{
+							Console.ForegroundColor = ConsoleColor.Green;
+							if (x==0 || x==42)
+								switch (y)
+								{
+									case 0:
+										Console.Write("+");
+										break;
+									default:
+										Console.Write("|");
+										break;
+								}
+							else
+							  Console.Write("-");
+							Console.ForegroundColor = ConsoleColor.White;
+						}
+						if (item == 2)
+						{
+							Console.Write("o");
+						}
+
+						if (item == 3)
+						{
+							Console.ForegroundColor = ConsoleColor.DarkRed;
+							Console.Write("=");
+							Console.ForegroundColor = ConsoleColor.White;
+							paddleX = x;
+							WaitMicroseconds(delayTimer*6);
+							//Console.SetCursorPosition(1, 2);
+							//Console.Write($"({x:0000}, {y:0000}) Paddle");
+						}
+
+						if (item == 4) //4=ball
+						{
+							if (!badBallSeen && x == 4 && y == 4)
+							{
+								badBallSeen = true;
+								continue;
+							}
+
+							badBallSeen = false;
+							Console.ForegroundColor = ConsoleColor.Blue;
+							Console.Write("o");
+							Console.ForegroundColor = ConsoleColor.White;
+							WaitMicroseconds(delayTimer * 60);
+							//Console.SetCursorPosition(1,3);
+							//Console.Write($"({x:0000}, {y:0000}) Ball");
+							joystick = 0;
+							if (x < paddleX)
+								joystick = -1;
+							if (x > paddleX)
+								joystick = 1;
+							WaitMicroseconds(delayTimer);
+						}
+					}
+					var pt = new Point {X = (int) x, Y = (int) y};
+					grid[pt] = item;
+				}
+			}
+
+			Console.ReadLine();
 		}
 
 	}
