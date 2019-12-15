@@ -29,12 +29,14 @@ namespace Day10
 			Shoot200(new IntPoint { X = 20, Y = 18 }, Day10Input.InputStrings);
 //			Calc(Day10Input.InputStrings);
 			return;
+			/*
 			PrintInput(Day10Input.Ex1);
 			Calc(Day10Input.Ex1);
 			PrintInput(Day10Input.InputStrings);
 			Calc(Day10Input.InputStrings);
 			PrintInput(Day10Input.Ex2);
 			Calc(Day10Input.Ex2);
+			*/
 		}
 
 		public static bool Blocks(IntPoint lookAt, IntPoint blocker, IntPoint basePoint, string[] lines)

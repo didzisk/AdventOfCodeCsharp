@@ -395,7 +395,7 @@ namespace Day11
 			{ }
 		}
 
-		public static async void Part2Calc()
+		public static void Part2Calc()
 		{
 			Console.ReadLine();
 			List<INT> input = new List<INT>();
