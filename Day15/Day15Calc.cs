@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 
 namespace Day15
@@ -10,7 +11,7 @@ namespace Day15
 	{
 		static void OutputConsole(string text, long position, long output)
 		{
-			Console.WriteLine(String.Format(text, position, output));
+			//Console.WriteLine(String.Format(text, position, output));
 		}
 		//north (1), south (2), west (3), and east (4)
 		private const int N = 1;
@@ -38,8 +39,18 @@ namespace Day15
 			var nodeList = new Dictionary<Point, Node>();
 			nodeList.Add(new Point(0,0), rootNode);
 			var currentNode = rootNode;
+			Console.SetCursorPosition(currentNode.X + 30, currentNode.Y + 30);
+			Console.Write("x");
 			TryAllDirections(rootNode, 0, mem, nodeList);
-
+			var OxygenNode = nodeList.First(e => e.Value.IsOxygen);
+			var current = OxygenNode.Value.Parent;
+			int i = 0;
+			while (current.Parent != null)
+			{
+				i++;
+				current = current.Parent;
+			}
+			Console.WriteLine($"Num steps = {i}");
 		}
 
 		public static int AdvanceToNode(int pc, long[] mem, Node currentNode, Point nodeAt, Dictionary<Point, Node> nodeList)
@@ -72,8 +83,18 @@ namespace Day15
 						X = nodeAt.X, Y = nodeAt.Y, IsOxygen = st.Result == 2, Parent = currentNode
 					};
 					nodeList.Add(nodeAt, newNode);
+					Console.SetCursorPosition(nodeAt.X+30, nodeAt.Y+30);
+					if (newNode.IsOxygen)
+					{
+						Console.Write("o");
+					}
+					else
+					{
+						Console.Write(".");
+
+					}
 					localCounter = TryAllDirections(newNode, localCounter, mem, nodeList);
-					localCounter = RetreatToParent(localCounter, mem, currentNode, nodeList);
+					localCounter = RetreatToParent(localCounter, mem, newNode, nodeList);
 				}
 			}
 
@@ -89,6 +110,9 @@ namespace Day15
 				return pc;
 			if (currentNode.X != parent.X && currentNode.Y != parent.Y)
 				throw new Exception("tried an illegal move");
+			//Console.SetCursorPosition(currentNode.X + 30, currentNode.Y + 30);
+			//Console.Write("<");
+
 			var localCounter = pc;
 			int dir = N;
 			if (currentNode.X < parent.X)
@@ -99,8 +123,12 @@ namespace Day15
 				dir = S;
 			if (currentNode.Y > parent.Y)
 				dir = N;
+			//Console.SetCursorPosition(parent.X + 30, parent.Y + 30);
+			//Console.Write("p");
 			var st = Machine.RunToInput(pc, mem, dir, OutputConsole);
 			st = Machine.RunToOutput(st.ProgramCounter, mem, OutputConsole);
+			if (st.Result==0)
+				throw new Exception("Tried to go back and failed, wtf?");
 			/*	0: Wall. Position not changed.
 				1: Moved
 				2: Moved. Oxygen. */
