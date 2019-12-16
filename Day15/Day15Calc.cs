@@ -19,6 +19,9 @@ namespace Day15
 		private const int W = 3;
 		private const int E = 4;
 
+		private static long[] OMem=new long[10000];
+		private static int OCounter;
+
 		public class Node
 		{
 			public int X { get; set; }
@@ -27,6 +30,7 @@ namespace Day15
 			public bool WallE { get; set; }
 			public bool WallN { get; set; }
 			public bool WallS { get; set; }
+			public int NumWalls { get; set; }
 			public bool IsOxygen { get; set; }
 			public Node Parent { get; set; }
 		}
@@ -44,13 +48,46 @@ namespace Day15
 			TryAllDirections(rootNode, 0, mem, nodeList);
 			var OxygenNode = nodeList.First(e => e.Value.IsOxygen);
 			var current = OxygenNode.Value.Parent;
-			int i = 0;
+			int i = 1;
 			while (current.Parent != null)
 			{
 				i++;
 				current = current.Parent;
 			}
 			Console.WriteLine($"Num steps = {i}");
+
+			CalcPart2();
+		}
+
+		public static void CalcPart2()
+		{
+			Console.Clear();
+			var rootNode = new Node { X = 0, Y = 0 };
+			var nodeList = new Dictionary<Point, Node>();
+			nodeList.Add(new Point(0, 0), rootNode);
+			var currentNode = rootNode;
+			Console.SetCursorPosition(currentNode.X + 30, currentNode.Y + 30);
+			Console.Write("x");
+			TryAllDirections(rootNode, 0, OMem, nodeList);
+			var maxDist = 0;
+			var deadEnds = nodeList.Where(e => e.Value.NumWalls == 3).Select(kvp=>kvp.Value);
+			foreach (var deNode in deadEnds)
+			{
+				var current = deNode.Parent;
+				if (current==null)
+					continue;
+				int i = 1;
+				while (current.Parent != null)
+				{
+					i++;
+					current = current.Parent;
+				}
+				Console.WriteLine($"Num steps = {i}");
+				if (i > maxDist)
+					maxDist = i;
+				Console.WriteLine($"Final Num steps = {maxDist}");
+			}
+
 		}
 
 		public static int AdvanceToNode(int pc, long[] mem, Node currentNode, Point nodeAt, Dictionary<Point, Node> nodeList)
@@ -72,6 +109,8 @@ namespace Day15
 			/*	0: Wall. Position not changed.
 				1: Moved
 				2: Moved. Oxygen. */
+			if (st.Result == 0)
+				currentNode.NumWalls++;
 			localCounter = (int)st.ProgramCounter;
 			Node newNode;
 			if (!nodeList.ContainsKey(nodeAt))
@@ -83,10 +122,12 @@ namespace Day15
 						X = nodeAt.X, Y = nodeAt.Y, IsOxygen = st.Result == 2, Parent = currentNode
 					};
 					nodeList.Add(nodeAt, newNode);
-					Console.SetCursorPosition(nodeAt.X+30, nodeAt.Y+30);
+					Console.SetCursorPosition(nodeAt.X+30, nodeAt.Y+60);
 					if (newNode.IsOxygen)
 					{
 						Console.Write("o");
+						mem.CopyTo(OMem, 0);
+						OCounter = (int)st.ProgramCounter;
 					}
 					else
 					{
@@ -94,6 +135,12 @@ namespace Day15
 
 					}
 					localCounter = TryAllDirections(newNode, localCounter, mem, nodeList);
+					if (newNode.NumWalls == 3 &&!newNode.IsOxygen)
+					{
+						Console.SetCursorPosition(nodeAt.X + 30, nodeAt.Y + 60);
+						Console.Write("d");
+					}
+
 					localCounter = RetreatToParent(localCounter, mem, newNode, nodeList);
 				}
 			}
