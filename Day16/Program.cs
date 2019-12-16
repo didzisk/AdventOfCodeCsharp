@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 
 namespace Day16
@@ -21,6 +22,8 @@ namespace Day16
 			calcPart1(Day16Input.Ex2);
 			calcPart1(Day16Input.Ex3);
 			calcPart1(Day16Input.Official);
+
+			calcPart2();
 		}
 
 		public static string calcPart1(string input)
@@ -35,6 +38,60 @@ namespace Day16
 
 		}
 
+		public static string calcPart2()
+		{
+			var offset = 5973847;
+
+			var originalInput = Day16Input.Official;
+			var inputLength = originalInput.Length * 10000;
+			var remainingLength = inputLength - offset;
+			var builder=new StringBuilder(inputLength);
+			for (int si = 0; si < 10000; si++)
+			{
+				builder.Append(Day16Input.Official);
+			}
+
+			var ch = new char[remainingLength];
+			builder.CopyTo(offset, ch, 0, remainingLength);
+			for (int i = 0; i < 100; i++)
+			{
+				var partialSum = ch.Sum(x => (int)(x - 48));
+				for (int j = 0; j < remainingLength; j++)
+				{
+					var t = partialSum;
+					partialSum -= (int)ch[j]-48;
+					if (t >= 0)
+					{
+						ch[j] = (char)(t % 10 + 48);
+					}
+					else
+					{
+						ch[j] = (char)((-t) % 10 + 48);
+					}
+				}
+			}
+			var st = new string(ch.Take(8).ToArray());
+			Console.WriteLine(st);
+			//input_list = list(map(int, input_string)) * 10000
+			//input_length = len(input_list)
+
+			//for i in range(100):
+
+			//partial_sum = sum(input_list[j] for j in range(offset, input_length))
+			//for j in range(offset, input_length):
+
+			//t = partial_sum
+
+			//partial_sum -= input_list[j]
+
+			//if t >= 0:
+			//input_list[j] = t % 10
+
+			//else:
+			//input_list[j] = (-t) % 10
+			return st;
+
+		}
 		public static string CalcNextPhase(string input)
 		{
 			var pattern = new int[]{0, 1, 0, -1};
