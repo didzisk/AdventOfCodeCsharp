@@ -75,6 +75,8 @@ namespace Day17
 			Day17Input.Day17Code.CopyTo(mem, 0);
 			mem[0] = 2;
 			bool wantCamera = false;
+			//R,8,L,10,L,12,R,4,R,8,L,12,R,4,R,4,R,8,L,10,L,12,R,4,R,8,L,10,R,8,R,8,L,10,L,12,R,4,R,8,L,12,R,4,R,4,R,8,L,10,R,8,R,8,L,12,R,4,R,4,R,8,L,10,R,8,R,8,L,12,R,4,R,4
+			// 
 			string program = "A,B,A,C,A,B,C,B,C,B\nR,8,L,10,L,12,R,4\nR,8,L,12,R,4,R,4\nR,8,L,10,R,8\ny\n";
 			st.ProgramCounter = 0;
 			foreach (char c in program)
