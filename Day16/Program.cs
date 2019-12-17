@@ -72,23 +72,7 @@ namespace Day16
 			}
 			var st = new string(ch.Take(8).ToArray());
 			Console.WriteLine(st);
-			//input_list = list(map(int, input_string)) * 10000
-			//input_length = len(input_list)
 
-			//for i in range(100):
-
-			//partial_sum = sum(input_list[j] for j in range(offset, input_length))
-			//for j in range(offset, input_length):
-
-			//t = partial_sum
-
-			//partial_sum -= input_list[j]
-
-			//if t >= 0:
-			//input_list[j] = t % 10
-
-			//else:
-			//input_list[j] = (-t) % 10
 			return st;
 
 		}
