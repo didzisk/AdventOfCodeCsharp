@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Day17
+namespace Day18
 {
 	public class Day18Input
 	{

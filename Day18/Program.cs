@@ -6,7 +6,7 @@ namespace Day18
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Day18Calc.CalcMain();
         }
     }
 }
