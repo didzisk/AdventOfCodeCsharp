@@ -7,7 +7,7 @@ namespace Day19
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            Day19Calc.Calc();
+            Day19Calc.CalcPart2();
         }
     }
 }
