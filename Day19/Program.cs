@@ -8,10 +8,7 @@ namespace Day19
         {
             Console.WriteLine("Hello World!");
             Day19Calc.CalcPart2();
-<<<<<<< HEAD
-=======
 //            Day19Calc.Calc();
->>>>>>> day19
         }
     }
 }
