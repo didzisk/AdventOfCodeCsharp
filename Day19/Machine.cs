@@ -34,9 +34,18 @@ namespace Day19
 			return Calc(st, memory, new long[0], outputFunc).Result;
 		}
 
+		public static MachineStatus RunToInput(MachineStatus st, long[] memory, int singleInput)
+		{
+			return Calc(st, memory, new long[] { singleInput }, (s, l, arg3) => { }, CalcMode.RunToFirstInput);
+		}
+
 		public static MachineStatus RunToInput(MachineStatus st, long[] memory, int singleInput, Action<string, long, long> outputFunc)
 		{
 			return Calc(st, memory, new long[]{ singleInput }, outputFunc, CalcMode.RunToFirstInput);
+		}
+		public static MachineStatus RunToOutput(MachineStatus st, long[] memory)
+		{
+			return Calc(st, memory, new long[0], (s, l, arg3) => { }, CalcMode.RunToFirstOutput);
 		}
 		public static MachineStatus RunToOutput(MachineStatus st, long[] memory, Action<string, long, long> outputFunc)
 		{
