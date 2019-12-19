@@ -7,170 +7,95 @@ using System.Text;
 namespace Day19
 {
 
-	class Day19Calc
-	{
-		static void OutputConsole(string text, long position, long output)
-		{
-			//Console.WriteLine(String.Format(text, position, output));
-		}
+    class Day19Calc
+    {
+        static void OutputConsole(string text, long position, long output)
+        {
+            //Console.WriteLine(String.Format(text, position, output));
+        }
 
-		public class Node
-		{
-			public int X { get; set; }
-			public int Y { get; set; }
-			public bool WallW { get; set; }
-			public bool WallE { get; set; }
-			public bool WallN { get; set; }
-			public bool WallS { get; set; }
-			public int NumWalls { get; set; }
-			public bool IsOxygen { get; set; }
-			public Node Parent { get; set; }
-		}
-		public static void Calc()
-		{
-			var width = 50;
-			var arr = new char[width, width];
-			var li = new List<int>();
-			var mem = new long[10000];
-			MachineStatus st = new MachineStatus { ProgramCounter = 0 };
-			Day19Input.Day19Code.CopyTo(mem, 0);
-			{
-				for (int x = 0; x < width; x++)
-				{
-					for (int y = 0; y < width; y++)
-					{
-						st = new MachineStatus { ProgramCounter = 0 };
-						Day19Input.Day19Code.CopyTo(mem, 0);
-						st = Machine.RunToInput(st, mem, x, OutputConsole);
-						st = Machine.RunToInput(st, mem, y, OutputConsole);
-						st = Machine.RunToOutput(st, mem, OutputConsole);
-						arr[x, y] = (char)(st.Result + 48);
-						Console.SetCursorPosition(x, y);
-						Console.Write(arr[x, y]);
+        public class Node
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+            public bool WallW { get; set; }
+            public bool WallE { get; set; }
+            public bool WallN { get; set; }
+            public bool WallS { get; set; }
+            public int NumWalls { get; set; }
+            public bool IsOxygen { get; set; }
+            public Node Parent { get; set; }
+        }
+        public static void Calc()
+        {
+            var width = 50;
+            var arr = new char[width, width];
+            var li = new List<int>();
+            var mem = new long[10000];
+            MachineStatus st = new MachineStatus { ProgramCounter = 0 };
+            Day19Input.Day19Code.CopyTo(mem, 0);
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    for (int y = 0; y < width; y++)
+                    {
+                        st = new MachineStatus { ProgramCounter = 0 };
+                        Day19Input.Day19Code.CopyTo(mem, 0);
+                        st = Machine.RunToInput(st, mem, x, OutputConsole);
+                        st = Machine.RunToInput(st, mem, y, OutputConsole);
+                        st = Machine.RunToOutput(st, mem, OutputConsole);
+                        arr[x, y] = (char)(st.Result + 48);
+                        Console.SetCursorPosition(x, y);
+                        Console.Write(arr[x, y]);
 
-						li.Add((int)st.Result);
-					}
-				}
-				var num=li.Count(e => e == 1);
-				Console.WriteLine($"Num cells {num}");
-			}
-/*
-				do
-				{
-					st = Machine.RunToOutput(st, mem, OutputConsole);
-					if (!st.RanToHalt)
-					{
-						switch ((char) st.Result)
-						{
-							case '\n':
-								y++;
-								x = 0;
-								break;
-							default:
-								arr[x, y] = (char) st.Result;
-								x++;
-								break;
-						}
+                        li.Add((int)st.Result);
+                    }
+                }
+                var num = li.Count(e => e == 1);
+                Console.WriteLine($"Num cells {num}");
+            }
+            return;
+        }
 
-						Console.Write((char) st.Result);
-					}
-				} while (!st.RanToHalt);
-			}
-			var checksum = 0;
-			for (int y = 0; y < arr.GetLength(1); y++)
-			{
-				for (int x = 0; x < arr.GetLength(0); x++)
-				{
-					Console.SetCursorPosition(x,y);
-					Console.Write(arr[x,y]);
-					if (x == 0 || x == arr.GetLength(0) - 1 || y == 0 || y == arr.GetLength(1) - 1)
-						continue;
-					if (arr[x - 1, y] == '#' && arr[x + 1, y] == '#' && arr[x, y - 1] == '#' && arr[x, y + 1] == '#')
-						checksum += x * y;
-				}
-			}
-			Console.WriteLine($"Checksum: {checksum}");
-			Console.ReadLine();
-			//part2
-			Day17Input.Day17Code.CopyTo(mem, 0);
-			mem[0] = 2;
-			bool wantCamera = false;
-			//R,8,L,10,L,12,R,4,R,8,L,12,R,4,R,4,R,8,L,10,L,12,R,4,R,8,L,10,R,8,R,8,L,10,L,12,R,4,R,8,L,12,R,4,R,4,R,8,L,10,R,8,R,8,L,12,R,4,R,4,R,8,L,10,R,8,R,8,L,12,R,4,R,4
-			// 
-			string program = "A,B,A,C,A,B,C,B,C,B\nR,8,L,10,L,12,R,4\nR,8,L,12,R,4,R,4\nR,8,L,10,R,8\ny\n";
-			st.ProgramCounter = 0;
-			foreach (char c in program)
-			{
-				st = Machine.RunToInput(st, mem, c, OutputConsole);
-			}
-			do
-			{
-				st = Machine.RunToOutput(st, mem, OutputConsole);
-				if (Console.CursorLeft>=43 && Console.CursorTop>=49)
-					Console.Clear();
+        public static void CalcPart2()
+        {
+            Console.Clear();
+            int y = 10;
+            int x = 0;
+            int xStart = 0;
+            var squareFits = false;
+            do
+            {
+                y++;
+                Console.WriteLine(y);
+                while (!HasBeam(xStart,y))
+                {
+                    xStart++;
+                };
+                x = xStart;
+                while (HasBeam(x+99,y))
+                {
+                    if (!HasBeam(x, y))
+                        throw new Exception("weird");
+                    if (HasBeam(x, y + 99))
+                    {
+                        Console.WriteLine($"{x * 10000 + y}");
+                        return;
+                    }
+                    x++;
+                }
+            } while (!squareFits); 
+        }
 
-				if (st.Result<256)
-				  Console.Write((char)st.Result);
-				else
-				{
-					Console.WriteLine(st.Result);
-				}
-			} while (!st.RanToHalt);
-			*/
-			return;
-		}
-
-		public static void CalcPart2()
-		{
-			Console.Clear();
-			var mem = new long[1000000];
-			//Day17Input.Day17Code.CopyTo(mem, 0);
-			mem[0] = 2;
-			bool wantCamera = false;
-			string program = "A,B,A,C,A,B,C,B,C,B\nR,8,L,10,L,12,R,4\nR,8,L,12,R,4,R,4\nR,8,L,10,R,8\n";
-			var st = new MachineStatus {ProgramCounter = 0};
-			foreach (char c in program)
-			{
-				st = Machine.RunToInput(st, mem, c, OutputConsole);
-			}
-			st = new MachineStatus { ProgramCounter = 0 };
-			do
-			{
-				st = Machine.RunToOutput(st, mem, OutputConsole);
-			} while (!st.RanToHalt);
-
-			if (wantCamera)
-			{
-				var x = 0;
-				var y = 0;
-				st = new MachineStatus { ProgramCounter = 0 };
-				do
-				{
-					st = Machine.RunToOutput(st, mem, OutputConsole);
-					if (!st.RanToHalt)
-					{
-						switch ((char)st.Result)
-						{
-							case '\n':
-								y++;
-								x = 0;
-								break;
-							default:
-								x++;
-								break;
-						}
-
-						Console.Write((char)st.Result);
-					}
-				} while (!st.RanToHalt);
-			}
-
-			st = Machine.RunToOutput(st, mem, OutputConsole);
-
-			Console.WriteLine($"Final Num dust = {st.Result}");
-
-		}
-
-
-	}
+        public static bool HasBeam(int x, int y)
+        {
+            var mem = new long[10000];
+            var st = new MachineStatus { ProgramCounter = 0 };
+            Day19Input.Day19Code.CopyTo(mem, 0);
+            st = Machine.RunToInput(st, mem, x, OutputConsole);
+            st = Machine.RunToInput(st, mem, y, OutputConsole);
+            st = Machine.RunToOutput(st, mem, OutputConsole);
+            return (st.Result == 1);
+        }
+    }
 }
