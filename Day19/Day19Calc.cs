@@ -27,7 +27,7 @@ namespace Day19
 		public static void CalcPart2()
 		{
 			Console.Clear();
-			Console.WindowHeight = 60;
+			Console.WindowHeight = 55;
 			int y = 10;
 			int xStart = 0;
 			while (true)

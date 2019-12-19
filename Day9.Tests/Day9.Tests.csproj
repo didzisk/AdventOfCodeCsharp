@@ -13,8 +13,4 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Day9\Day9.csproj" />
-  </ItemGroup>
-
 </Project>
