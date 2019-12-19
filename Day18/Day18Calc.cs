@@ -190,8 +190,6 @@ def reachable4(grid, starts, havekeys):
             }
             Console.WriteLine(MinWalk(grid, starts, ""));
             //print(minwalk(grid, tuple(starts), ''))
-            Console.WriteLine(Sorted("zadbc"));
-            Console.WriteLine(StartKey(starts, Sorted("zadbc")));
         }
 
         public static string Sorted(string input)
