@@ -98,8 +98,4 @@ namespace Day19
             return (st.Result == 1);
         }
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> day19
 }
