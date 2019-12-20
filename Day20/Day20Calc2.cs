@@ -62,8 +62,17 @@ namespace Day20
                             if (IsCapitalLetter(lines[y + 2][x]) && IsCapitalLetter(lines[y + 1][x]))
                                 label = new string(new [] { lines[y+1][x], lines[y+2][x] });
                             node.Label = label;
-                            if ((node.Label == "AA" || node.Label == "ZZ") && level > 0)
-	                            continue;
+                            if ((node.Label == "AA" || node.Label == "ZZ"))
+                            {
+	                            if (level > 0)
+		                            continue;
+	                            else
+	                            {
+		                            node.Level = 0;
+                                    nodes.Add(node);
+                                    continue;
+	                            }
+                            }
                             node.Level = isOuter ? level : level + 1;
                             nodes.Add(node);
                         }
