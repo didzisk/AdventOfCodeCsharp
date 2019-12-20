@@ -73,7 +73,10 @@ namespace Day20
                                     continue;
 	                            }
                             }
-                            node.Level = isOuter ? level : level + 1;
+                            if (isOuter && !string.IsNullOrEmpty(node.Label))
+                                node.Level = level + 1;
+                            else
+                                node.Level = level;
                             nodes.Add(node);
                         }
                     }
@@ -130,7 +133,7 @@ namespace Day20
 		        return true;
 	        if (x > width - 3)
 		        return true;
-	        if (y > width - 3)
+	        if (y > height - 3)
 		        return true;
 	        return false;
         }
