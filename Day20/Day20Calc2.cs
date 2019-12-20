@@ -10,6 +10,7 @@ namespace Day20
         public int X { get; set; }
         public int Y { get; set; }
         public string Label { get; set; }
+        public int Level { get; set; }
 
         public List<Node2> Neighbors { get; set; }
         public Node2(int x, int y)
@@ -21,22 +22,31 @@ namespace Day20
     }
     public static class Day20Calc2
     {
-        public static void CalcPart1(string input)
+        public static void CalcPart2(string input)
         {
-            var nodes = ParseLevel(input);
-            var startNode = nodes.First(e => e.Label == "AA");
-            var dist = Bfs(nodes);
-            Console.WriteLine($"dist:{dist}");
+	        var nodes = new List<Node2>();
+	        var level = 0;
+	        var mindist = 100000000;
+	        while (level < 100 && mindist>level)
+	        {
+		        ParseLevel(nodes, input, level);
+		        var startNode = nodes.First(e => e.Label == "AA");
+		        var dist = Bfs(nodes);
+		        if (dist < mindist)
+			        mindist = dist;
+		        Console.WriteLine($"dist:{dist} level:{level}");
+		        level++;
+	        }
         }
         
-        public static List<Node2> ParseLevel(string input)
+        public static List<Node2> ParseLevel(List<Node2>nodes, string input, int level)
         {
-            var nodes = new List<Node2>();
             var lines = input.Split("\r\n");
             for (int y = 0; y < lines.Length; y++)
             {
                 for (int x = 0; x < lines[y].Length; x++)
                 {
+	                bool isOuter = IsOuter(x, y, lines[y].Length, lines.Length);
                     if (lines[y][x] == '.')
                     {
                         var node = new Node2(x, y);
@@ -52,6 +62,9 @@ namespace Day20
                             if (IsCapitalLetter(lines[y + 2][x]) && IsCapitalLetter(lines[y + 1][x]))
                                 label = new string(new [] { lines[y+1][x], lines[y+2][x] });
                             node.Label = label;
+                            if ((node.Label == "AA" || node.Label == "ZZ") && level > 0)
+	                            continue;
+                            node.Level = isOuter ? level : level + 1;
                             nodes.Add(node);
                         }
                     }
@@ -60,6 +73,7 @@ namespace Day20
             foreach (var node in nodes)
             {
                 var p = nodes.Where(e=>
+                    e.Level==node.Level &&
                 (
                     (e.X==node.X && (e.Y==node.Y-1 || e.Y==node.Y+1)) ||
                     (e.Y==node.Y && (e.X==node.X-1 || e.X==node.X+1)) ||
@@ -87,7 +101,7 @@ namespace Day20
                         return lvl;
                 }
             }
-            return 0;
+            return 100000000;
         }
 
         public static bool IsCapitalLetter(char ch)
