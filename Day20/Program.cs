@@ -6,8 +6,9 @@ namespace Day20
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            Day20Calc.CalcPart1(Day20Input.Ex1);
+            Day20Calc1.CalcPart1(Day20Input.Ex1);
+            Day20Calc1.CalcPart1(Day20Input.Ex2);
+            Day20Calc1.CalcPart1(Day20Input.Official);
         }
     }
 }

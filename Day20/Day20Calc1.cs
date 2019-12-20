@@ -5,21 +5,21 @@ using System.Text;
 
 namespace Day20
 {
-    public class Node
+    public class Node1
     {
         public int X { get; set; }
         public int Y { get; set; }
         public string Label { get; set; }
 
-        public List<Node> Neighbors { get; set; }
-        public Node(int x, int y)
+        public List<Node1> Neighbors { get; set; }
+        public Node1(int x, int y)
         {
             X = x;
             Y = y;
-            Neighbors = new List<Node>();
+            Neighbors = new List<Node1>();
         }
     }
-    public static class Day20Calc
+    public static class Day20Calc1
     {
         public static void CalcPart1(string input)
         {
@@ -29,9 +29,9 @@ namespace Day20
             Console.WriteLine($"dist:{dist}");
         }
         
-        public static List<Node> ParseLevel(string input)
+        public static List<Node1> ParseLevel(string input)
         {
-            var nodes = new List<Node>();
+            var nodes = new List<Node1>();
             var lines = input.Split("\r\n");
             for (int y = 0; y < lines.Length; y++)
             {
@@ -39,7 +39,7 @@ namespace Day20
                 {
                     if (lines[y][x] == '.')
                     {
-                        var node = new Node(x, y);
+                        var node = new Node1(x, y);
                         if (x>1 && y>1)
                         {
                             var label = "";
@@ -70,20 +70,21 @@ namespace Day20
             return nodes;
         }
 
-        public static int Bfs(List<Node> nodes)
+        public static int Bfs(List<Node1> nodes)
         {
-            var q = new Queue<(Node,Node, int)>();
+            var q = new Queue<(Node1,Node1, int)>();
             var root = nodes.First(e => e.Label == "AA");
             q.Enqueue((root, null, 0));
             while (q.Count>0)
             {
-                var (v, cameFrom, lvl) = q.Dequeue();
-                lvl++;
-                foreach (var item in v.Neighbors.Where(e=>e!=cameFrom))
+                var (v, cameFrom, dist) = q.Dequeue();
+                dist++;
+                var forwardNeighbors = v.Neighbors.Where(e => !e.Equals(cameFrom)).ToList();
+                foreach (var item in forwardNeighbors)
                 {
-                    q.Enqueue((item, v, lvl));
-                    if (v.Label == "ZZ")
-                        return lvl;
+                    q.Enqueue((item, v, dist));
+                    if (item.Label == "ZZ")
+                        return dist;
                 }
             }
             return 0;
