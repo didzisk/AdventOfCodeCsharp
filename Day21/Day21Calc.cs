@@ -14,47 +14,46 @@ namespace Day21
 
         public static void CalcPart2()
         {
-            if (CalcTwoScript("OR C J\nAND A J\nNOT J J\nAND D J\n"))
+            var onescript =
+            "OR C J\n" + //c wall-j
+            "AND A J\n" +//a wall, too-j
+            "NOT J J\n" +//reverse, meaning if either is empty
+            "AND D J\n"//d must be intact
+            ;
+            var twoscript =
+                "NOT A J\n" + //a hole-j
+                "NOT B T\n" + //b hole-t
+                "OR T J\n" +  //if either is hole-j
+                "NOT C T\n" +  //c hole-t
+                "OR T J\n" +   //if either is hole-j
+                "NOT D T\n" +  //d hole-t
+                "NOT T T\n"+
+                "AND T J\n" +   //if either is hole-j
+                "NOT E T\n"+   //e must be wall, too
+                "NOT T T\n"+   //so we store the reverse of is hole
+                "OR H T\n"+    //or H
+                "AND T J\n"
+;
+            if (CalcTwoScript(
+                    twoscript))
                 Console.WriteLine("Success");
             return;
         }
             public static void CalcPart1()
         {
         //    if (CalcOneScript("OR C J\nAND A J\nNOT J J\nAND D J"))
-                if (CalcOneScript("OR C J\nAND A J\nNOT J J\nAND D J\n"))
+                if (CalcOneScript(
+                "NOT A J\n" + //a hole-j
+                "NOT B T\n" + //b hole-t
+                "OR T J\n" +  //if either is hole-j
+                "NOT C T\n" +  //c hole-t
+                "OR T J\n" +   //if either is hole-j
+                "NOT D T\n" +  //d hole-t
+                "NOT T T\n" +  //reverse - d must be wall
+                "AND T J\n"      //put together
+                    ))
                     Console.WriteLine("Success");
             return;
-            var commands = new[] { "NOT", "OR", "AND" };
-            var fromRegisters = new[] { "A", "B", "C", "D", "J", "T" };
-            var toRegisters = new[] { "J", "T" };
-            var normalCommands =
-                from c in commands
-                from r in fromRegisters
-                from t in toRegisters
-                select $"{c} {r} {t}\n";
-            var finalCommands =
-                from c in commands
-                from r in fromRegisters
-                select $"{c} {r} J\n";
-            var fourCommandScripts =
-                from a in normalCommands
-                from b in normalCommands
-                from c in normalCommands
-                from d in finalCommands
-                select a + b + c + d;
-            var i = 0;
-            foreach (string c in fourCommandScripts)
-            {
-                CalcOneScript(c);
-                if (i % 32 == 0)
-                {
-                    Console.SetCursorPosition(1, 1);
-                    Console.Write(i);
-                    Console.Write(c);
-                }
-                i++;
-            }
-            //CalcOneScript("");
         }
 
         public static bool CalcOneScript(string script)

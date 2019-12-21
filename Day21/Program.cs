@@ -7,6 +7,7 @@ namespace Day21
         static void Main(string[] args)
         {
             Day21Calc.CalcPart1();
+            Day21Calc.CalcPart2();
         }
     }
 }
