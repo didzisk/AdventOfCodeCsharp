@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 
 namespace Day22
@@ -33,6 +34,66 @@ namespace Day22
 
         }
 
+        public static void CalcPart2()
+        {
+            var cards = 119315717514047;
+            var repeats = 101741582076661;
+            long incrementMul = 1;
+            long offsetDiff = 0;
+            long inv(long n)
+            {
+                return (long)BigInteger.ModPow(n, cards - 2, cards);
+            }
+
+            (long, long) GetSequence(long iterations)
+            {
+                var increment = (long)BigInteger.ModPow(incrementMul, iterations, cards);
+                var offset = offsetDiff * (1 - increment) * inv((1 - incrementMul) % cards);
+                return (increment, offset);
+            }
+
+            long Get(long offset, long increment, long i)
+            {
+                //gets the ith number in a given sequence
+                return (offset + i * increment) % cards;
+            }
+
+            var commands = Day22Input.Official.Split("\r\n");
+            foreach (var command in commands)
+            {
+                if (command.StartsWith("deal into new stack"))
+                {
+                    incrementMul = -1 * incrementMul;
+                    incrementMul %= cards;
+                    offsetDiff += incrementMul;
+                    offsetDiff %= cards;
+                }
+                var lastPart = command.Split(' ').Last();
+                var intArg = 0;
+                if (int.TryParse(lastPart, out intArg))
+                {
+                    if (command.StartsWith("cut"))
+                    {
+                        offsetDiff += intArg * incrementMul;
+                        offsetDiff %= cards;
+                    }
+                    if (command.StartsWith("deal with"))
+                    {
+                        incrementMul *= inv(intArg);
+                        incrementMul %= cards;
+
+                    }
+                }
+
+            }
+            var (increment, offset) = GetSequence(repeats);
+            var place = Get(offset, increment, 2020);
+            Console.WriteLine(place);
+        }
+
+
+
+
         public static void PerformShuffle(int[] stack, string shuffleScript)
         {
             var commands = shuffleScript.Split("\r\n");
@@ -47,8 +108,8 @@ namespace Day22
                     if (command.StartsWith("cut"))
                     {
                         var end = intArg;
-                        IEnumerable<int> src; 
-                        if (intArg<0)
+                        IEnumerable<int> src;
+                        if (intArg < 0)
                         {
                             var remainingLen = stack.Length + end;
                             src = stack.Skip(remainingLen).Take(-end).Concat(stack.Take(remainingLen));
@@ -56,18 +117,18 @@ namespace Day22
                         }
                         else
                         {
-                            var remainingLen = stack.Length-end;
+                            var remainingLen = stack.Length - end;
                             src = stack.Skip(end).Take(remainingLen).Concat(stack.Take(end));
                         }
                         stack = src.ToArray();
                     }
                     if (command.StartsWith("deal with"))
                     {
-                        int i= 0;
+                        int i = 0;
                         foreach (var item in stack.ToArray())
                         {
                             stack[i] = item;
-                            i = (i + intArg)%stack.Length;
+                            i = (i + intArg) % stack.Length;
 
                         }
                     }
@@ -84,7 +145,7 @@ namespace Day22
             {
                 for (int i = 0; i < stack.Length; i++)
                 {
-                    if (stack[i]==2019)
+                    if (stack[i] == 2019)
                     {
                         Console.WriteLine($"Pos{i}");
                         break;
@@ -94,30 +155,5 @@ namespace Day22
 
         }
 
-    }
-
-    public static class Extensions
-    {
-        /// <summary>
-        /// Get the array slice between the two indexes.
-        /// ... Inclusive for start index, exclusive for end index.
-        /// </summary>
-        public static T[] Slice<T>(this T[] source, int start, int end)
-        {
-            // Handles negative ends.
-            if (end < 0)
-            {
-                end = source.Length + end;
-            }
-            int len = end - start;
-
-            // Return new array.
-            T[] res = new T[len];
-            for (int i = 0; i < len; i++)
-            {
-                res[i] = source[i + start];
-            }
-            return res;
-        }
     }
 }

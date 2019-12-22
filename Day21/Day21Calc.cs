@@ -14,12 +14,6 @@ namespace Day21
 
         public static void CalcPart2()
         {
-            var onescript =
-            "OR C J\n" + //c wall-j
-            "AND A J\n" +//a wall, too-j
-            "NOT J J\n" +//reverse, meaning if either is empty
-            "AND D J\n"//d must be intact
-            ;
             var twoscript =
                 "NOT A J\n" + //a hole-j
                 "NOT B T\n" + //b hole-t
