@@ -61,13 +61,25 @@ namespace Day23
                 wi.st = Machine.Calc(wi.st, m1input, (a, b, c) => { targetList.Add(c); Console.WriteLine(c); });
             }
             var inputQueue = ProcessTargetList(targetList);
-            
+            long natX = 0;
+            long natY = 0;
             while (true)
             {
+                if (inputQueue.Count==0)
+                {
+                    Console.WriteLine($"Nat sending {natX}, {natY}");
+                    inputQueue.Add((0, natX, natY));
+                }
                 targetList = new List<long>();
                 var (a, x, y) = inputQueue[0];
                 inputQueue.RemoveAt(0);
                 var winput = new List<long>() { x, y };
+                if (a==255)
+                {
+                    natX = x;
+                    natY = y;
+                    continue;
+                }
                 computers[(int)a].inputQueue.Add(x);
                 computers[(int)a].inputQueue.Add(y);
                 computers[(int)a].st = Machine.Calc(computers[(int)a].st, computers[(int)a].inputQueue,
