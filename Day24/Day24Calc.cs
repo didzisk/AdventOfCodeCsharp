@@ -7,6 +7,30 @@ namespace Day24
 {
     public static class Day24Calc
     {
+        public static void Calc1() 
+        {
+            var lifeStart = Day24Calc.ImportInput(Day24Input.Official);
+            Day24Calc.PrettyPrintRating(lifeStart);
+            var rating = Day24Calc.NextRating(lifeStart);
+            var history = new List<int>();
+            history.Add(lifeStart);
+            while (!history.Contains(rating))
+            {
+                Day24Calc.PrettyPrintRating(rating);
+                history.Add(rating);
+                rating = Day24Calc.NextRating(rating);
+            }
+            Console.WriteLine(rating);
+            Console.WriteLine();
+            foreach (var item in history)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine(rating);
+
+
+        }
+
         public static int ImportInput(string input)
         {
             var s=string.Join("",input.Split("\r\n"));
