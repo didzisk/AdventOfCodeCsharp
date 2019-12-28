@@ -8,9 +8,9 @@ namespace Day24
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            Day24Calc.Calc1();
+            //Day24Calc.Calc1();
 
-            Day24Calc2.Calc1();
+            Day24Calc2.Calc2();
         }
     }
 }
