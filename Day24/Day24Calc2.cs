@@ -25,8 +25,10 @@ namespace Day24
 
         public static void Calc2()
         {
-            var ex1bugs=Calc2Outer(Day24Input.Ex1, 10);
+            var ex1bugs = Calc2Outer(Day24Input.Ex1, 10);
             Console.WriteLine($"Bugs {ex1bugs}");
+            var offbugs = Calc2Outer(Day24Input.Official, 200);
+            Console.WriteLine($"Bugs {offbugs}");
 
         }
         public static int Calc2Outer(string input, int minutes)
@@ -50,11 +52,11 @@ namespace Day24
                     var res = DoLife2(space, level);
                     newSpace.Add(level, res);
                     var currRating = GetRating(res);
-                    Console.WriteLine($"Level:{level}");
-                    PrettyPrintRating(currRating);
+                    //Console.WriteLine($"Level:{level}");
+                    //PrettyPrintRating(currRating);
                 }
                 space = newSpace;
-                Console.ReadLine();
+                //Console.ReadLine();
 
             }
             var numBugs=space.Sum((kvp) =>
@@ -64,6 +66,13 @@ namespace Day24
                 { bugs += k ? 1 : 0; }
                 return bugs;
             });
+            var minusLevels = space.Keys.Min();
+            var plusLevels = space.Keys.Max();
+            for (int i = minusLevels; i <=plusLevels; i++)
+            {
+                var rat = GetRating(space[i]);
+                //PrettyPrintRating(rat);
+            }
             return numBugs;
         }
 
@@ -91,6 +100,8 @@ namespace Day24
 
                 }
             }
+            res[2, 2] = false;
+
             return res;
         }
 
