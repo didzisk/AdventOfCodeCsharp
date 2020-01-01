@@ -53,17 +53,42 @@ namespace Day25
             st = Perform("take spool of cat6", st);
             st = Perform("north", st); //kitchen
             st = Perform("take shell", st);
-            /*
             st = Perform("west", st); //Security checkpoint
-            st = Perform("north", st); //Pressure sensitive, failure, back in SEC
-            */
-            st = Perform("south", st); //corridor
-            st = Perform("south", st); //crew q
-            st = Perform("east", st); //arcade
-            st = Perform("north", st); //passages
-            st = Perform("north", st); //storage
+            var things = new Dictionary<int, string> {
+                { 0,"easter egg" },
+                { 1,"sand"},
+                { 2,"fixed point" },
+                { 3,"coin" },
+                { 4,"spool of cat6" },
+                { 5, "shell" },
+                { 6, "hypercube" },
+                { 7, "asterisk" }
+            };
+            var oldGrayCode= Gray.IntToGray(170);
+            for (int i = 0; i < 256; i++)
+            {
+                var currCode = (i + 19) % 256;
+                Console.Write(currCode);
+                var grayCode = Gray.IntToGray(currCode);
+                Gray.showBitsInMemory(grayCode);
+                for (int j = 0; j < 8; j++)
+                {
+                    
+                    if (oldGrayCode[j] == 1 && grayCode[j] == 0)
+                        st = Perform($"drop {things[j]}", st); ;
+                    if (oldGrayCode[j] == 0 && grayCode[j] == 1)
+                        st = Perform($"take {things[j]}", st);
+                }
+                st = Perform("north", st); //Pressure sensitive, failure, back in SEC
+                st = Perform("inv", st); //corridor
+                oldGrayCode = grayCode;
+                Console.ReadLine();
+                Console.Clear();
+            }
+
 
 
         }
+        
     }
 }
