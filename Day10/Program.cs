@@ -238,7 +238,7 @@ namespace Day10
 			}
 
 			var withAngles = points
-				.Select(p => new { Point=new IntPoint { X = p.X, Y = p.Y }, Angle = Angle(b, p)})
+				.Select(p => new { Point=new IntPoint { X = p.X, Y = p.Y }, Angle = Angle(b, p), AngleUnrounded = AngleUnrounded(b, p) })
 				.OrderBy(elm=>elm.Angle)
 				.ThenBy(elm=>
 				{
@@ -247,10 +247,23 @@ namespace Day10
 					return dist;
 				} )
 				.ToList();
+
+			var withAnglesUnrounded=withAngles
+				.OrderBy(elm=>elm.AngleUnrounded)
+				.ThenBy(elm =>
+				{
+					var dv = DirectionVector(b, elm.Point);
+					var dist = DistanceInDirectionVectors(b, elm.Point, dv);
+					return dist;
+				})
+				.ToList();
 			var i = 2;
-			foreach (var angle in withAngles)
+			for (int j = 0; j < withAngles.Count; j++)
 			{
-				Console.WriteLine($"({angle.Point.X},{angle.Point.Y}) {angle.Angle}");
+				var a = withAngles[j];
+				var au = withAnglesUnrounded[j];
+				Console.WriteLine($"({a.Point.X},{a.Point.Y}) {a.Angle} ****** ({au.Point.X},{au.Point.Y}) {au.AngleUnrounded}");
+
 			}
 
 			double previousAngle = -10.0;
@@ -293,6 +306,19 @@ namespace Day10
 		{
 			var dir = BigDirectionVector(b, t);
 			var sin = Math.Round((double)dir.X / Math.Sqrt((double)dir.Y * (double)dir.Y + (double)dir.X * (double)dir.X), 6);
+			if (dir.X > 0 && dir.Y < 0)
+				return sin;
+			if (dir.X > 0 && dir.Y > 0)
+				return sin + 1;
+			if (dir.X < 0 && dir.Y > 0)
+				return sin + 2;
+			return sin + 3;
+
+		}
+		public static double AngleUnrounded(IntPoint b, IntPoint t)
+		{
+			var dir = BigDirectionVector(b, t);
+			var sin = (double)dir.X / Math.Sqrt((double)dir.Y * (double)dir.Y + (double)dir.X * (double)dir.X);
 			if (dir.X > 0 && dir.Y < 0)
 				return sin;
 			if (dir.X > 0 && dir.Y > 0)
